@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,10 +34,10 @@ namespace DeliveryApp.DTO
 
 		private Config()
 		{
-			_dataDirectory = "C:\\Users\\jackf\\source\\repos\\DeliveryApp\\DeliveryApp\\data\\";
-			_backupDirectory = "C:\\Users\\jackf\\source\\repos\\DeliveryApp\\DeliveryApp\\data\\";
-			_reportsDirectory = "C:\\Users\\jackf\\source\\repos\\DeliveryApp\\DeliveryApp\\reports\\";
-			_logsDirectory = "C:\\Users\\jackf\\source\\repos\\DeliveryApp\\DeliveryApp\\reports\\";
+			_dataDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\data\\";
+			_backupDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\data\\";
+			_reportsDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\reports\\";
+			_logsDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\logs\\";
 		}
 	}
 }

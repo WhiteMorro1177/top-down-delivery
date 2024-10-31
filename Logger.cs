@@ -32,14 +32,17 @@ namespace DeliveryApp
 
 		private Logger() { }
 
-		public void Log(string level, string message)
+		public void Log(LogLevel level, string className, string message)
 		{
 			string today = DateTime.Today.ToShortDateString();
 			string logfilePath = $"{Config.GetConfig.LogsDirectory}log_{today}.txt";
-			using (StreamWriter wr = new StreamWriter(logfilePath))
+			if (!File.Exists(logfilePath))
 			{
-				wr.WriteLine($"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] - Log Level: {level} - Message: {message}");
+				File.Create(logfilePath);
 			}
+
+
+			File.WriteAllText(logfilePath, $"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] - Log Level: {level} - Module: {className} - Message: {message}");
 		}
 	}
 }

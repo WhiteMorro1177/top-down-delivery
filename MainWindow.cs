@@ -14,8 +14,8 @@ namespace DeliveryApp
 		// private readonly MongoClient _client = new MongoClient("mongodb://10.241.167.184:27017");
 
 		private static List<Order> lvDeliveryDataCache = null;
-		private Config config;
-		private Logger logger;
+		private readonly Config config;
+		private readonly Logger logger;
 
 		public MainForm()
 		{
@@ -31,12 +31,14 @@ namespace DeliveryApp
 			{
 				string rawBackupData = File.ReadAllText(backupFilePath);
 				orders = JsonConvert.DeserializeObject<List<Order>>(rawBackupData);
+				logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Data extracted from backup - Loaded orders: {orders.Count}");
 			}
 			else
 			{
 				// get data from init_json
 				string rawInitData = File.ReadAllText(config.DataDirectory + "init_data.json");
 				orders = JsonConvert.DeserializeObject<List<Order>>(rawInitData);
+				logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Data extracted from init file - Loaded orders: {orders.Count}");
 			}
 
 			InitializeComponent();
@@ -54,8 +56,8 @@ namespace DeliveryApp
 			{
 				if (!districts.Contains(order.District)) districts.Add(order.District);
 
-				string tmpShprtDate = order.CreationDate.ToShortDateString();
-				if (!dates.Contains(tmpShprtDate)) dates.Add(tmpShprtDate);
+				string tmpShortDate = order.CreationDate.ToShortDateString();
+				if (!dates.Contains(tmpShortDate)) dates.Add(tmpShortDate);
 			});
 
 			cbOrderDistrict.Items.AddRange(districts.ToArray());
@@ -75,9 +77,11 @@ namespace DeliveryApp
 				orderRecord.SubItems.Add(order.CreationDate.ToString());
 				orderRecord.SubItems.Add(order.DeliveryDate.ToString());
 
-				// add record to list veiw
+				// add record to list view
 				lvDeliveryData.Items.Add(orderRecord);
 			});
+
+			logger.Log(Logger.LogLevel.INFO, GetType().FullName, "Orders list loaded successfully");
 		}
 
 		private void RefillDeliveryData(List<Order> orders)
@@ -109,9 +113,13 @@ namespace DeliveryApp
 		{
 			bool hasError = false;
 			// save full list of orders
-			if (lvDeliveryDataCache == null) { lvDeliveryDataCache = GetCurrentDeliveryData(); }
+			if (lvDeliveryDataCache == null) 
+			{
+				lvDeliveryDataCache = GetCurrentDeliveryData();
+				logger.Log(Logger.LogLevel.INFO, GetType().FullName, "First filter request - Filling the cache");
+			}
 
-			// update ListVeiw using filters
+			// update ListView using filters
 			string districtFilter = cbOrderDistrict.Text;
 			string dateFilter = cbOrderCreationDate.Text;
 
@@ -121,11 +129,13 @@ namespace DeliveryApp
 			{
 				cbOrderDistrict.Text = null;
 				hasError = true;
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "DeliveryDistrict filter has incorrect value -- Skipping...");
 			}
 			if (!lvDeliveryDataCache.Select(order => order.CreationDate.ToShortDateString()).Contains(dateFilter))
 			{
 				cbOrderCreationDate.Text = null;
 				hasError = true;
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "DeliveryCreationDate filter has incorrect value -- Skipping...");
 			}
 
 			if (hasError) return;
@@ -149,17 +159,19 @@ namespace DeliveryApp
 			// erase Combo Boxes values
 			cbOrderDistrict.SelectedItem = null;
 			cbOrderCreationDate.SelectedItem = null;
-			// reset ListVeiw
+			// reset ListView
 			if (lvDeliveryDataCache != null)
 			{
 				RefillDeliveryData(lvDeliveryDataCache);
 			}
+
+			logger.Log(Logger.LogLevel.INFO, GetType().FullName, "Filters has been reseted");
 		}
 
 		private void addRecordToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			AddRecord addNewRecordForm = new AddRecord();
-
+			logger.Log(Logger.LogLevel.INFO, GetType().FullName, "Calling AddRecord form");
 			addNewRecordForm.ShowDialog();
 
 			Order orderToAdd = addNewRecordForm.NewOrder;
@@ -173,22 +185,26 @@ namespace DeliveryApp
 				else ids = lvDeliveryDataCache.Select(order => order.Id).ToList();
 
 				ids.Sort();
-				orderToAdd.Id = ids.Last() + 1;
+				orderToAdd.Id = ids.Max() + 1;
 
-				// write new order to list veiw
+				// write new order to list view
 				FillDeliveryData(new List<Order> { orderToAdd });
+			} else
+			{
+				logger.Log(Logger.LogLevel.DEBUG, GetType().FullName, "0 orders added");
 			}
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			List<Order> ordersBackup = new List<Order>();
+			List<Order> ordersBackup;
 			if (lvDeliveryDataCache == null) ordersBackup = GetCurrentDeliveryData();
 			else ordersBackup = lvDeliveryDataCache;
 
 			string jsonOrders = JsonConvert.SerializeObject(ordersBackup);
 
 			File.WriteAllText(config.BackupDirectory + "backup.json", jsonOrders);
+			logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Backup saved in {config.BackupDirectory}");
 		}
 
 		private void createReportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -197,6 +213,7 @@ namespace DeliveryApp
 			foreach (var district in cbOrderDistrict.Items) districts.Add(district.ToString());
 			
 			ReportCreation reportCreationForm = new ReportCreation(districts);
+			logger.Log(Logger.LogLevel.INFO, GetType().FullName, "Calling ReportCreation form");
 			reportCreationForm.ShowDialog();
 
 			DateTime startReportDate = reportCreationForm.StartReportDate;
@@ -222,11 +239,12 @@ namespace DeliveryApp
 				}
 				return false;
 			}).ToList();
-
+			logger.Log(Logger.LogLevel.DEBUG, GetType().FullName, $"{ordersForReport.Count} selected for report");
 
 			string jsonReport = JsonConvert.SerializeObject(ordersForReport);
 			string reportDate = DateTime.Now.ToString();
 			File.WriteAllText(config.ReportsDirectory + $"report_{reportDate}", jsonReport);
+			logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Report created in {config.ReportsDirectory}");
 		}
 	}
 }

@@ -13,6 +13,7 @@ namespace DeliveryApp
 {
 	public partial class ReportCreation : Form
 	{
+		private Logger logger;
 		public DateTime StartReportDate { get; private set; }
 		public DateTime EndReportDate { get; private set; }
 		public string ReportDistrict { get; private set; }
@@ -21,6 +22,7 @@ namespace DeliveryApp
 		
 		public ReportCreation(List<string> districts)
 		{
+			logger = Logger.GetLogger;
 			Districts = districts;
 
 			InitializeComponent();
@@ -42,6 +44,8 @@ namespace DeliveryApp
 			cbReportTimeHours.SelectedIndex = 0;
 			cbReportTimeMinutes.SelectedIndex = 0;
 			cbReportTimeSeconds.SelectedIndex = 0;
+
+			logger.Log(Logger.LogLevel.INFO, GetType().FullName, "Time fields reseted");
 		}
 
 		private void btnCreateReport_Click(object sender, EventArgs e)
@@ -61,15 +65,16 @@ namespace DeliveryApp
 			{
 				timePickerFirstDeliveryDate.Value = DateTime.Today;
 				hasError = true;
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Unexpected token in delivery date");
 			}
 			else if (startReportDate > DateTime.Now)
 			{
 				timePickerFirstDeliveryDate.Value = DateTime.Today;
 				hasError = true;
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Report date bigger than today date");
 			}
 
 			if (hasError) return;
-			else hasError = false;
 
 			// calculate report timespan
 			DateTime endReportDate = startReportDate.AddMinutes(30);
@@ -78,6 +83,7 @@ namespace DeliveryApp
 			StartReportDate = startReportDate;
 			EndReportDate = endReportDate;
 			ReportDistrict = cbReportDistrict.SelectedItem.ToString();
+			logger.Log(Logger.LogLevel.INFO, GetType().FullName, "All values extracted");
 		}
 	}
 }

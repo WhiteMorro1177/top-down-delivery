@@ -15,12 +15,16 @@ namespace DeliveryApp
 {
 	public partial class AddRecord : Form
 	{
+		private Logger logger;
+
 		private string _errorDescription = string.Empty;
 		private Order _newOrder = null;
 		internal Order NewOrder { get { return _newOrder; } }
 
 		public AddRecord()
 		{
+			logger = Logger.GetLogger;
+
 			InitializeComponent();
 
 			timePickerOrderCreationDate.MaxDate = DateTime.Today;
@@ -55,11 +59,12 @@ namespace DeliveryApp
 			tbOrderWeight.ForeColor = Color.Black;
 
 			// check "Weight"
-			double weight = 0;
+			double weight;
 			if (!double.TryParse(tbOrderWeight.Text.Replace(".", ","), out weight))
 			{
 				_errorDescription += "Некорректное значение веса";
 				tbOrderWeight.ForeColor = Color.Red;
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect weight");
 			}
 			else _newOrder.Weight = weight;
 
@@ -68,6 +73,7 @@ namespace DeliveryApp
 			if (district == string.Empty)
 			{
 				_errorDescription += "\nНазвание района не может быть пустым";
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect district - Cannot be empty");
 			}
 			else _newOrder.District = district;
 
@@ -79,6 +85,8 @@ namespace DeliveryApp
 			if (!DateTime.TryParse(rawCreationDate, out creationDate))
 			{
 				_errorDescription += "\nНеверная дата создания заказа";
+				
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect creation date - Unexpected token");
 
 				cbCreationDateHours.ForeColor = Color.Red;
 				cbCreationDateMinutes.ForeColor = Color.Red;
@@ -91,6 +99,8 @@ namespace DeliveryApp
 			if (!DateTime.TryParse(rawDeliveryDate, out deliveryDate))
 			{
 				_errorDescription += "\nНеверная дата создания заказа";
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect delivery date - Unexpected token");
+
 
 				cbDeliveryDateHours.ForeColor = Color.Red;
 				cbDeliveryDateMinutes.ForeColor = Color.Red;
@@ -102,7 +112,9 @@ namespace DeliveryApp
 
 			if (creationDate >= deliveryDate)
 			{
-				_errorDescription += "\nДата доставки не может быть боьше даты создания";
+				_errorDescription += "\nДата доставки не может быть больше даты создания";
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect date - create after delivery");
+
 
 				cbCreationDateHours.ForeColor = Color.Red;
 				cbCreationDateMinutes.ForeColor = Color.Red;
@@ -118,6 +130,8 @@ namespace DeliveryApp
 			if (creationDate > DateTime.Now)
 			{
 				_errorDescription += "\nЗаказ не может быть создан из будущего)";
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect creation date - Grater than DateTime.Now");
+
 				cbCreationDateHours.ForeColor = Color.Red;
 				cbCreationDateMinutes.ForeColor = Color.Red;
 				cbCreationDateSeconds.ForeColor = Color.Red;
@@ -126,6 +140,8 @@ namespace DeliveryApp
 			if (deliveryDate > DateTime.Now)
 			{
 				_errorDescription += "\nЗаказ не может быть доставлен в будущем)";
+				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect delivery date - Grater than DateTime.Now");
+
 				cbDeliveryDateHours.ForeColor = Color.Red;
 				cbDeliveryDateMinutes.ForeColor = Color.Red;
 				cbDeliveryDateSeconds.ForeColor = Color.Red;
