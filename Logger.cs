@@ -41,8 +41,7 @@ namespace DeliveryApp
 				File.Create(logfilePath);
 			}
 
-
-			File.WriteAllText(logfilePath, $"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] - Log Level: {level} - Module: {className} - Message: {message}");
+			File.AppendAllText(logfilePath, $"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] - Log Level: {level} - Module: {className} - Message: {message}\n");
 		}
 	}
 }

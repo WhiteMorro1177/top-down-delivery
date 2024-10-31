@@ -138,7 +138,11 @@ namespace DeliveryApp
 				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "DeliveryCreationDate filter has incorrect value -- Skipping...");
 			}
 
-			if (hasError) return;
+			if (hasError)
+			{
+				cbOrderDistrict.Text = string.Empty;
+				cbOrderCreationDate.Text = string.Empty;
+			}
 
 			List<Order> orders = lvDeliveryDataCache.Where(
 				order =>
@@ -149,7 +153,8 @@ namespace DeliveryApp
 				{
 					if (dateFilter == "") return true;
 					return order.CreationDate.ToShortDateString() == dateFilter;
-				}).ToList();
+				}
+			).ToList();
 
 			RefillDeliveryData(orders);
 		}
@@ -242,8 +247,15 @@ namespace DeliveryApp
 			logger.Log(Logger.LogLevel.DEBUG, GetType().FullName, $"{ordersForReport.Count} selected for report");
 
 			string jsonReport = JsonConvert.SerializeObject(ordersForReport);
-			string reportDate = DateTime.Now.ToString();
-			File.WriteAllText(config.ReportsDirectory + $"report_{reportDate}", jsonReport);
+			string reportDate = DateTime.Now.ToString().Replace(" ", "_").Replace(":", "-").Replace(".", "-");
+
+			string reportFilePath = $"{config.ReportsDirectory}report_{reportDate}.json";
+			if (!File.Exists(reportFilePath))
+			{
+				File.Create(reportFilePath);
+			}
+
+			File.WriteAllText(reportFilePath, jsonReport);
 			logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Report created in {config.ReportsDirectory}");
 		}
 	}

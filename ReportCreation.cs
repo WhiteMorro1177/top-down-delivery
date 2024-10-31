@@ -84,6 +84,7 @@ namespace DeliveryApp
 			EndReportDate = endReportDate;
 			ReportDistrict = cbReportDistrict.SelectedItem.ToString();
 			logger.Log(Logger.LogLevel.INFO, GetType().FullName, "All values extracted");
+			Close();
 		}
 	}
 }

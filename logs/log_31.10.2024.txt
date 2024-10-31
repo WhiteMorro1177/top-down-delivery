@@ -1,0 +1,61 @@
+[13:50:26] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Data extracted from backup - Loaded orders: 11
+[13:50:26] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:50:39] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: First filter request - Filling the cache
+[13:50:39] - Log Level: WARNING - Module: DeliveryApp.MainForm - Message: DeliveryCreationDate filter has incorrect value -- Skipping...
+[13:50:41] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Backup saved in C:\Users\jackf\source\repos\top-down-delivery\data\
+[13:51:56] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Data extracted from backup - Loaded orders: 11
+[13:51:56] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:52:2] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: First filter request - Filling the cache
+[13:52:2] - Log Level: WARNING - Module: DeliveryApp.MainForm - Message: DeliveryCreationDate filter has incorrect value -- Skipping...
+[13:52:11] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Backup saved in C:\Users\jackf\source\repos\top-down-delivery\data\
+[13:52:35] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Data extracted from backup - Loaded orders: 11
+[13:52:35] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:52:51] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: First filter request - Filling the cache
+[13:53:25] - Log Level: WARNING - Module: DeliveryApp.MainForm - Message: DeliveryCreationDate filter has incorrect value -- Skipping...
+[13:54:48] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Data extracted from backup - Loaded orders: 11
+[13:54:48] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:54:53] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: First filter request - Filling the cache
+[13:54:53] - Log Level: WARNING - Module: DeliveryApp.MainForm - Message: DeliveryCreationDate filter has incorrect value -- Skipping...
+[13:54:53] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:54:59] - Log Level: WARNING - Module: DeliveryApp.MainForm - Message: DeliveryCreationDate filter has incorrect value -- Skipping...
+[13:54:59] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:55:1] - Log Level: WARNING - Module: DeliveryApp.MainForm - Message: DeliveryCreationDate filter has incorrect value -- Skipping...
+[13:55:1] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:55:5] - Log Level: WARNING - Module: DeliveryApp.MainForm - Message: DeliveryCreationDate filter has incorrect value -- Skipping...
+[13:55:5] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:55:20] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:55:26] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:55:31] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Calling ReportCreation form
+[13:55:56] - Log Level: INFO - Module: DeliveryApp.ReportCreation - Message: All values extracted
+[13:56:8] - Log Level: DEBUG - Module: DeliveryApp.MainForm - Message: 0 selected for report
+[13:57:26] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Data extracted from backup - Loaded orders: 11
+[13:57:26] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:57:30] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: First filter request - Filling the cache
+[13:57:30] - Log Level: WARNING - Module: DeliveryApp.MainForm - Message: DeliveryCreationDate filter has incorrect value -- Skipping...
+[13:57:30] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:57:32] - Log Level: WARNING - Module: DeliveryApp.MainForm - Message: DeliveryDistrict filter has incorrect value -- Skipping...
+[13:57:32] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:57:35] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Calling ReportCreation form
+[13:57:52] - Log Level: INFO - Module: DeliveryApp.ReportCreation - Message: All values extracted
+[13:57:52] - Log Level: DEBUG - Module: DeliveryApp.MainForm - Message: 0 selected for report
+[13:58:21] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Data extracted from backup - Loaded orders: 11
+[13:58:21] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:58:25] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: First filter request - Filling the cache
+[13:58:25] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[13:58:26] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Calling ReportCreation form
+[13:58:49] - Log Level: INFO - Module: DeliveryApp.ReportCreation - Message: All values extracted
+[13:58:49] - Log Level: DEBUG - Module: DeliveryApp.MainForm - Message: 0 selected for report
+[14:0:43] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Data extracted from backup - Loaded orders: 11
+[14:0:43] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[14:0:49] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: First filter request - Filling the cache
+[14:0:49] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[14:0:50] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Calling ReportCreation form
+[14:1:5] - Log Level: INFO - Module: DeliveryApp.ReportCreation - Message: All values extracted
+[14:1:5] - Log Level: DEBUG - Module: DeliveryApp.MainForm - Message: 0 selected for report
+[14:4:28] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Data extracted from backup - Loaded orders: 11
+[14:4:28] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[14:4:35] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: First filter request - Filling the cache
+[14:4:35] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Orders list loaded successfully
+[14:4:36] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Calling ReportCreation form
+[14:5:4] - Log Level: INFO - Module: DeliveryApp.ReportCreation - Message: All values extracted
+[14:5:4] - Log Level: DEBUG - Module: DeliveryApp.MainForm - Message: 0 selected for report
