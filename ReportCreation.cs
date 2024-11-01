@@ -1,12 +1,7 @@
-﻿using DeliveryApp.DTO;
+﻿using DeliveryApp.helper;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DeliveryApp
@@ -59,9 +54,14 @@ namespace DeliveryApp
 				hasError = true;
 			}
 
-			string rawDeliveryDate = $"{timePickerFirstDeliveryDate.Text} {cbReportTimeHours.SelectedItem}:{cbReportTimeMinutes.SelectedItem}:{cbReportTimeSeconds.SelectedItem}";
+			// string rawDeliveryDate = $"{timePickerFirstDeliveryDate.Text} {cbReportTimeHours.SelectedItem}:{cbReportTimeMinutes.SelectedItem}:{cbReportTimeSeconds.SelectedItem}";
+			string rawDeliveryDate = string.Join("-", timePickerFirstDeliveryDate.Text.Split('.').Reverse());
+			string rawDeliveryTime = $"{cbReportTimeHours.SelectedItem}:{cbReportTimeMinutes.SelectedItem}:{cbReportTimeSeconds.SelectedItem}";
+			string rawDeliveryDateTime = DateTimeFormatter.FormatToStringLong(DateTimeFormatter.FormatToDateTime(rawDeliveryDate, rawDeliveryTime));
+
+
 			DateTime startReportDate;
-			if (!DateTime.TryParse(rawDeliveryDate, out startReportDate))
+			if (!DateTime.TryParse(rawDeliveryDateTime, out startReportDate))
 			{
 				timePickerFirstDeliveryDate.Value = DateTime.Today;
 				hasError = true;

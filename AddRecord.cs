@@ -1,14 +1,9 @@
 ﻿using DeliveryApp.DTO;
+using DeliveryApp.helper;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DeliveryApp
@@ -78,14 +73,20 @@ namespace DeliveryApp
 			else _newOrder.District = district;
 
 			// check dates
-			string rawCreationDate = $"{timePickerOrderCreationDate.Text} {cbCreationDateHours.SelectedItem}:{cbCreationDateMinutes.SelectedItem}:{cbCreationDateSeconds.SelectedItem}";
-			string rawDeliveryDate = $"{timePickerOrderDeliveryDate.Text} {cbDeliveryDateHours.SelectedItem}:{cbDeliveryDateMinutes.SelectedItem}:{cbDeliveryDateSeconds.SelectedItem}";
+			string rawCreationTime = $"{cbCreationDateHours.SelectedItem}:{cbCreationDateMinutes.SelectedItem}:{cbCreationDateSeconds.SelectedItem}";
+			string rawDeliveryTime = $"{cbDeliveryDateHours.SelectedItem}:{cbDeliveryDateMinutes.SelectedItem}:{cbDeliveryDateSeconds.SelectedItem}";
+
+			string rawCreationDate = string.Join("-", timePickerOrderCreationDate.Text.Split('.').Reverse());
+			string rawDeliveryDate = string.Join("-", timePickerOrderDeliveryDate.Text.Split('.').Reverse());
+
+			string rawCreationDateTime = DateTimeFormatter.FormatToStringLong(DateTimeFormatter.FormatToDateTime(rawCreationDate, rawCreationTime));
+			string rawDeliveryDateTime = DateTimeFormatter.FormatToStringLong(DateTimeFormatter.FormatToDateTime(rawDeliveryDate, rawDeliveryTime));
 
 			DateTime creationDate;
-			if (!DateTime.TryParse(rawCreationDate, out creationDate))
+			if (!DateTime.TryParse(rawCreationDateTime, out creationDate))
 			{
 				_errorDescription += "\nНеверная дата создания заказа";
-				
+
 				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect creation date - Unexpected token");
 
 				cbCreationDateHours.ForeColor = Color.Red;
@@ -96,7 +97,7 @@ namespace DeliveryApp
 				return;
 			}
 			DateTime deliveryDate;
-			if (!DateTime.TryParse(rawDeliveryDate, out deliveryDate))
+			if (!DateTime.TryParse(rawDeliveryDateTime, out deliveryDate))
 			{
 				_errorDescription += "\nНеверная дата создания заказа";
 				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect delivery date - Unexpected token");
@@ -110,9 +111,13 @@ namespace DeliveryApp
 				return;
 			}
 
+			Debug.WriteLine(creationDate);
+			Debug.WriteLine(deliveryDate);
+
+
 			if (creationDate >= deliveryDate)
 			{
-				_errorDescription += "\nДата доставки не может быть больше даты создания";
+				_errorDescription += "\nДата создания не может быть позже даты доставки";
 				logger.Log(Logger.LogLevel.WARNING, GetType().FullName, "Incorrect date - create after delivery");
 
 
@@ -135,7 +140,8 @@ namespace DeliveryApp
 				cbCreationDateHours.ForeColor = Color.Red;
 				cbCreationDateMinutes.ForeColor = Color.Red;
 				cbCreationDateSeconds.ForeColor = Color.Red;
-			} else _newOrder.CreationDate = creationDate;
+			}
+			else _newOrder.CreationDate = creationDate;
 
 			if (deliveryDate > DateTime.Now)
 			{
@@ -145,10 +151,15 @@ namespace DeliveryApp
 				cbDeliveryDateHours.ForeColor = Color.Red;
 				cbDeliveryDateMinutes.ForeColor = Color.Red;
 				cbDeliveryDateSeconds.ForeColor = Color.Red;
-			} else _newOrder.DeliveryDate = deliveryDate;
+			}
+			else _newOrder.DeliveryDate = deliveryDate;
 
 			if (_errorDescription == string.Empty) this.Close();
-			else tbErrors.Text = _errorDescription;
+			else 
+			{
+				tbErrors.Text = _errorDescription;
+				_newOrder = null;
+			}
 		}
 	}
 }

@@ -6,6 +6,7 @@ using DeliveryApp.DTO;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using DeliveryApp.helper;
 
 namespace DeliveryApp
 {
@@ -22,6 +23,12 @@ namespace DeliveryApp
 			// parse config
 			config = Config.GetConfig; // TODO(Create "Options" and oportunity to rewrite config)
 			logger = Logger.GetLogger;
+
+
+
+			Debug.WriteLine(new DateTime(2023, 10, 20, 14, 34, 55) >= new DateTime(2023, 10, 24, 12, 14, 49));
+
+
 
 			// try to load backup from previous session
 			// if not -> load test "init" data
@@ -56,7 +63,7 @@ namespace DeliveryApp
 			{
 				if (!districts.Contains(order.District)) districts.Add(order.District);
 
-				string tmpShortDate = order.CreationDate.ToShortDateString();
+				string tmpShortDate = DateTimeFormatter.FormatToStringShort(order.CreationDate);
 				if (!dates.Contains(tmpShortDate)) dates.Add(tmpShortDate);
 			});
 
@@ -74,8 +81,8 @@ namespace DeliveryApp
 				ListViewItem orderRecord = new ListViewItem(order.Id.ToString());
 				orderRecord.SubItems.Add(order.Weight.ToString());
 				orderRecord.SubItems.Add(order.District);
-				orderRecord.SubItems.Add(order.CreationDate.ToString());
-				orderRecord.SubItems.Add(order.DeliveryDate.ToString());
+				orderRecord.SubItems.Add(DateTimeFormatter.FormatToStringLong(order.CreationDate));
+				orderRecord.SubItems.Add(DateTimeFormatter.FormatToStringLong(order.DeliveryDate));
 
 				// add record to list view
 				lvDeliveryData.Items.Add(orderRecord);
@@ -100,8 +107,8 @@ namespace DeliveryApp
 				order.Id = int.Parse(lvItem.Text);
 				order.Weight = double.Parse(lvItem.SubItems[1].Text);
 				order.District = lvItem.SubItems[2].Text;
-				order.CreationDate = DateTime.Parse(lvItem.SubItems[3].Text);
-				order.DeliveryDate = DateTime.Parse(lvItem.SubItems[4].Text);
+				order.CreationDate = DateTimeFormatter.FormatToDateTime(lvItem.SubItems[3].Text);
+				order.DeliveryDate = DateTimeFormatter.FormatToDateTime(lvItem.SubItems[4].Text);
 
 				orders.Add(order);
 			}
@@ -113,10 +120,10 @@ namespace DeliveryApp
 		{
 			bool hasError = false;
 			// save full list of orders
-			if (lvDeliveryDataCache == null) 
+			if (lvDeliveryDataCache == null)
 			{
 				lvDeliveryDataCache = GetCurrentDeliveryData();
-				logger.Log(Logger.LogLevel.INFO, GetType().FullName, "First filter request - Filling the cache");
+				logger.Log(Logger.LogLevel.INFO, GetType().FullName, "Filling the cache");
 			}
 
 			// update ListView using filters
@@ -152,7 +159,7 @@ namespace DeliveryApp
 				}).Where(order =>
 				{
 					if (dateFilter == "") return true;
-					return order.CreationDate.ToShortDateString() == dateFilter;
+					return DateTimeFormatter.FormatToStringShort(order.CreationDate) == dateFilter;
 				}
 			).ToList();
 
@@ -189,12 +196,18 @@ namespace DeliveryApp
 				if (lvDeliveryDataCache == null) ids = GetCurrentDeliveryData().Select(order => order.Id).ToList();
 				else ids = lvDeliveryDataCache.Select(order => order.Id).ToList();
 
-				ids.Sort();
+				// ids.Sort();
 				orderToAdd.Id = ids.Max() + 1;
 
 				// write new order to list view
-				FillDeliveryData(new List<Order> { orderToAdd });
-			} else
+				if (orderToAdd != null)
+				{
+					FillDeliveryData(new List<Order> { orderToAdd });
+					if (lvDeliveryDataCache != null) lvDeliveryDataCache.Add(orderToAdd);
+					logger.Log(Logger.LogLevel.DEBUG, GetType().FullName, "New order added");
+				}
+			}
+			else
 			{
 				logger.Log(Logger.LogLevel.DEBUG, GetType().FullName, "0 orders added");
 			}
@@ -216,7 +229,7 @@ namespace DeliveryApp
 		{
 			List<string> districts = new List<string>();
 			foreach (var district in cbOrderDistrict.Items) districts.Add(district.ToString());
-			
+
 			ReportCreation reportCreationForm = new ReportCreation(districts);
 			logger.Log(Logger.LogLevel.INFO, GetType().FullName, "Calling ReportCreation form");
 			reportCreationForm.ShowDialog();
@@ -237,9 +250,9 @@ namespace DeliveryApp
 			{
 				if (order.District == reportDistrict)
 				{
-					if (order.DeliveryDate > startReportDate)
+					if (order.DeliveryDate >= startReportDate)
 					{
-						if (order.DeliveryDate < endReportDate) return true;
+						if (order.DeliveryDate <= endReportDate) return true;
 					}
 				}
 				return false;
@@ -247,13 +260,17 @@ namespace DeliveryApp
 			logger.Log(Logger.LogLevel.DEBUG, GetType().FullName, $"{ordersForReport.Count} selected for report");
 
 			string jsonReport = JsonConvert.SerializeObject(ordersForReport);
-			string reportDate = DateTime.Now.ToString().Replace(" ", "_").Replace(":", "-").Replace(".", "-");
+			string reportDate = DateTimeFormatter.FormatToStringLong(DateTime.Now).Replace(":", "_"); // DateTime.Now.ToString().Replace(" ", "_").Replace(":", "-").Replace(".", "-");
 
+			// C:\Users\jackf\source\repos\top-down-delivery\reports\
 			string reportFilePath = $"{config.ReportsDirectory}report_{reportDate}.json";
 			if (!File.Exists(reportFilePath))
 			{
-				File.Create(reportFilePath);
+				FileStream fs = File.Create(reportFilePath);
+				fs.Close();
 			}
+
+			
 
 			File.WriteAllText(reportFilePath, jsonReport);
 			logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Report created in {config.ReportsDirectory}");

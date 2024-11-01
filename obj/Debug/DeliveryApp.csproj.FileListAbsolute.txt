@@ -100,8 +100,6 @@ C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\System.Threading.Tasks.E
 C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\System.ValueTuple.dll
 C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\DnsClient.xml
 C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\Microsoft.Extensions.Logging.Abstractions.xml
-C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\MongoDB.Bson.xml
-C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\MongoDB.Driver.xml
 C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\Snappier.xml
 C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\System.Security.AccessControl.xml
 C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\System.Text.Encoding.CodePages.xml
@@ -116,3 +114,15 @@ C:\Users\jackf\source\repos\top-down-delivery\obj\Debug\DeliveryApp.csproj.CoreC
 C:\Users\jackf\source\repos\top-down-delivery\obj\Debug\Delivery.1FF6E028.Up2Date
 C:\Users\jackf\source\repos\top-down-delivery\obj\Debug\DeliveryApp.exe
 C:\Users\jackf\source\repos\top-down-delivery\obj\Debug\DeliveryApp.pdb
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\DnsClient.dll
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\SharpCompress.dll
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\Snappier.dll
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\System.Security.AccessControl.dll
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\System.Text.Encoding.CodePages.dll
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\ZstdSharp.dll
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\SharpCompress.pdb
+C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\System.Diagnostics.DiagnosticSource.xml

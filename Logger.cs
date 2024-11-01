@@ -1,11 +1,7 @@
 ﻿using DeliveryApp.DTO;
-using MongoDB.Bson.Serialization.Conventions;
+using DeliveryApp.helper;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeliveryApp
 {
@@ -34,14 +30,15 @@ namespace DeliveryApp
 
 		public void Log(LogLevel level, string className, string message)
 		{
-			string today = DateTime.Today.ToShortDateString();
+			string today = DateTimeFormatter.FormatToStringShort(DateTime.Now);
 			string logfilePath = $"{Config.GetConfig.LogsDirectory}log_{today}.txt";
 			if (!File.Exists(logfilePath))
 			{
-				File.Create(logfilePath);
+				FileStream fs = File.Create(logfilePath);
+				fs.Close();
 			}
 
-			File.AppendAllText(logfilePath, $"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] - Log Level: {level} - Module: {className} - Message: {message}\n");
+			File.AppendAllText(logfilePath, $"[{DateTimeFormatter.FormatToStringShort(DateTime.Now)}] - Log Level: {level} - Module: {className} - Message: {message}\n");
 		}
 	}
 }
