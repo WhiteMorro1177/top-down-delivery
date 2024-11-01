@@ -31,14 +31,14 @@ namespace DeliveryApp
 		public void Log(LogLevel level, string className, string message)
 		{
 			string today = DateTimeFormatter.FormatToStringShort(DateTime.Now);
-			string logfilePath = $"{Config.GetConfig.LogsDirectory}log_{today}.txt";
+			string logfilePath = Path.Combine(Config.GetConfig.LogsDirectory, $"log_{today}.txt");
 			if (!File.Exists(logfilePath))
 			{
 				FileStream fs = File.Create(logfilePath);
 				fs.Close();
 			}
 
-			File.AppendAllText(logfilePath, $"[{DateTimeFormatter.FormatToStringShort(DateTime.Now)}] - Log Level: {level} - Module: {className} - Message: {message}\n");
+			File.AppendAllText(logfilePath, $"[{DateTimeFormatter.FormatToStringLong(DateTime.Now).Substring(11)}] - Log Level: {level} - Module: {className} - Message: {message}\n");
 		}
 	}
 }

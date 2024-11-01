@@ -11,6 +11,8 @@ namespace DeliveryApp.DTO
 		private readonly string _reportsDirectory;
 		private readonly string _logsDirectory;
 
+		private readonly string _rootDirectory = "DeliveryAppDataDir";
+
 
 		public string DataDirectory { get { return _dataDirectory; } }
 		public string BackupDirectory { get { return _backupDirectory; } }
@@ -29,10 +31,26 @@ namespace DeliveryApp.DTO
 
 		private Config()
 		{
-			_dataDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\data\\";
-			_backupDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\data\\";
-			_reportsDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\reports\\";
-			_logsDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\logs\\";
+			// create directories
+			string rootDir = Path.Combine(Directory.GetCurrentDirectory(), _rootDirectory);
+			if (!Directory.Exists(rootDir)) Directory.CreateDirectory(rootDir);
+			Directory.SetCurrentDirectory(rootDir);
+
+			CheckAndCreateDirectory("data");
+			CheckAndCreateDirectory("reports");
+			CheckAndCreateDirectory("logs");
+
+			// save paths
+			_dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "data");
+			_backupDirectory = Path.Combine(Directory.GetCurrentDirectory(), "data");
+			_reportsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "reports");
+			_logsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "logs");
+		}
+
+		private void CheckAndCreateDirectory(string dirName)
+		{
+			string path = Path.Combine(Directory.GetCurrentDirectory(), dirName);
+			if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 		}
 	}
 }

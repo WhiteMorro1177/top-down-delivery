@@ -1,0 +1,1 @@
+[19:37:42] - Log Level: INFO - Module: DeliveryApp.MainForm - Message: Backup saved in C:\Users\jackf\source\repos\top-down-delivery\bin\Debug\DeliveryAppDataDir\data

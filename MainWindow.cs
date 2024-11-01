@@ -12,8 +12,6 @@ namespace DeliveryApp
 {
 	public partial class MainForm : Form
 	{
-		// private readonly MongoClient _client = new MongoClient("mongodb://10.241.167.184:27017");
-
 		private static List<Order> lvDeliveryDataCache = null;
 		private readonly Config config;
 		private readonly Logger logger;
@@ -32,7 +30,7 @@ namespace DeliveryApp
 
 			// try to load backup from previous session
 			// if not -> load test "init" data
-			string backupFilePath = config.BackupDirectory + "backup.json";
+			string backupFilePath = Path.Combine(config.BackupDirectory, "backup.json");
 			List<Order> orders = new List<Order>();
 			if (File.Exists(backupFilePath))
 			{
@@ -43,9 +41,14 @@ namespace DeliveryApp
 			else
 			{
 				// get data from init_json
-				string rawInitData = File.ReadAllText(config.DataDirectory + "init_data.json");
-				orders = JsonConvert.DeserializeObject<List<Order>>(rawInitData);
-				logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Data extracted from init file - Loaded orders: {orders.Count}");
+
+				string initdataFilePath = Path.Combine(config.DataDirectory, "init_data.json");
+				if (File.Exists(initdataFilePath))
+				{
+					string rawInitData = File.ReadAllText(Path.Combine(config.DataDirectory, "init_data.json"));
+					orders = JsonConvert.DeserializeObject<List<Order>>(rawInitData);
+					logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Data extracted from init file - Loaded orders: {orders.Count}");
+				}
 			}
 
 			InitializeComponent();
@@ -196,7 +199,6 @@ namespace DeliveryApp
 				if (lvDeliveryDataCache == null) ids = GetCurrentDeliveryData().Select(order => order.Id).ToList();
 				else ids = lvDeliveryDataCache.Select(order => order.Id).ToList();
 
-				// ids.Sort();
 				orderToAdd.Id = ids.Max() + 1;
 
 				// write new order to list view
@@ -221,7 +223,7 @@ namespace DeliveryApp
 
 			string jsonOrders = JsonConvert.SerializeObject(ordersBackup);
 
-			File.WriteAllText(config.BackupDirectory + "backup.json", jsonOrders);
+			File.WriteAllText(Path.Combine(config.BackupDirectory, "backup.json"), jsonOrders);
 			logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Backup saved in {config.BackupDirectory}");
 		}
 
@@ -260,17 +262,13 @@ namespace DeliveryApp
 			logger.Log(Logger.LogLevel.DEBUG, GetType().FullName, $"{ordersForReport.Count} selected for report");
 
 			string jsonReport = JsonConvert.SerializeObject(ordersForReport);
-			string reportDate = DateTimeFormatter.FormatToStringLong(DateTime.Now).Replace(":", "_"); // DateTime.Now.ToString().Replace(" ", "_").Replace(":", "-").Replace(".", "-");
-
-			// C:\Users\jackf\source\repos\top-down-delivery\reports\
-			string reportFilePath = $"{config.ReportsDirectory}report_{reportDate}.json";
+			string reportDate = DateTimeFormatter.FormatToStringLong(DateTime.Now).Replace(":", "_");
+			string reportFilePath = Path.Combine(config.ReportsDirectory, $"report_{reportDate}.json");
 			if (!File.Exists(reportFilePath))
 			{
 				FileStream fs = File.Create(reportFilePath);
 				fs.Close();
 			}
-
-			
 
 			File.WriteAllText(reportFilePath, jsonReport);
 			logger.Log(Logger.LogLevel.INFO, GetType().FullName, $"Report created in {config.ReportsDirectory}");
